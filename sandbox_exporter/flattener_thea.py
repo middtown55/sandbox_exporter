@@ -70,10 +70,10 @@ class TheaBSMFlattener(CvDataFlattener):
                     out.update(part2_val_out)
             del out['payload_data_partII_SEQUENCE']
 
-        if 'coreData_position_long' in out:
-            coreData_position_long = float(out['coreData_position_long'])/10e6
-            coreData_position_lat = float(out['coreData_position_lat'])/10e6
-            out['coreData_position'] = "POINT ({} {})".format(coreData_position_long, coreData_position_lat)
+        if 'core_data_position_long' in out:
+            core_data_position_long = float(out['core_data_position_long'])/10e6
+            core_data_position_lat = float(out['core_data_position_lat'])/10e6
+            out['core_data_position_long'] = "POINT ({} {})".format(core_data_position_long, core_data_position_lat)
 
         if 'coreData_size_width' in out:
             out['coreData_size'] = json.dumps({'width': int(out['coreData_size_width']),
@@ -104,8 +104,8 @@ class TheaTIMFlattener(CvDataFlattener):
     def __init__(self, **kwargs):
         super(TheaTIMFlattener, self).__init__(**kwargs)
         self.rename_prefix_fields += [
-            ('payload_data_TravelerInformation_dataFrames_TravelerDataFrame_', 'travelerdataframe_'),
-            ('payload_data_TravelerInformation_', 'travelerinformation_'),
+            ('payload_data_Traveler_information_dataFrames_TravelerDataFrame_', 'travelerdataframe_'),
+            ('payload_data_Traveler_information_', '_'),
             ('travelerdataframe_regions_GeographicalPath_description_path_', 'travelerdataframe_desc_'),
             ('travelerdataframe_regions_GeographicalPath_', 'travelerdataframe_'),
             ('_SEQUENCE', '_sequence'),
@@ -131,20 +131,20 @@ class TheaTIMFlattener(CvDataFlattener):
         out = super(TheaTIMFlattener, self).process(raw_rec)
 
         if 'travelerdataframe_msgId_lat' in out:
-            travelerdataframe_msgId_lat = float(out['travelerdataframe_msgId_lat'])/10e6
-            travelerdataframe_msgId_long = float(out['travelerdataframe_msgId_long'])/10e6
-            out['travelerdataframe_msgId_position'] = "POINT ({} {})".format(travelerdataframe_msgId_long, travelerdataframe_msgId_lat)
+            travelerdataframe_msgid_lat = float(out['travelerdataframe_msgid_lat'])/10e6
+            travelerdataframe_msgid_long = float(out['travelerdataframe_msgid_long'])/10e6
+            out['travelerdataframe_msgId_position'] = "POINT ({} {})".format(travelerdataframe_msgid_long, travelerdataframe_msgid_lat)
 
         return out
 
     def process_and_split(self, raw_rec):
         out_recs = []
         try:
-            tdfs = copy.deepcopy(raw_rec['payload']['data']['TravelerInformation']['dataFrames']['TravelerDataFrame'])
+            tdfs = copy.deepcopy(raw_rec['payload']['data']['Traveler_information']['dataFrames']['TravelerDataFrame'])
             if type(tdfs) == list:
                 for tdf in tdfs:
                     temp_rec = copy.deepcopy(raw_rec)
-                    temp_rec['payload']['data']['TravelerInformation']['dataFrames']['TravelerDataFrame'] = tdf
+                    temp_rec['payload']['data']['Traveler_information']['dataFrames']['TravelerDataFrame'] = tdf
                     out_recs.append(temp_rec)
             else:
                 out_recs.append(raw_rec)

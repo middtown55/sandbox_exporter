@@ -61,7 +61,6 @@ class DataFlattener(object):
                 del out[old_f]
 
         out = {k: int(v) if k in int_fields else v for k,v in out.items()}
-        # out = {k: json.dumps(v) if k in json_string_fields else v for k,v in out.items()}
         return out
 
     def add_enhancements(self, rec):
@@ -93,7 +92,7 @@ class CvDataFlattener(DataFlattener):
         ]
         self.rename_fields = [
             ('metadata_dataType', 'dataType'),
-            ('metadata_recordGeneratedAt', 'metadata_generatedAt'),
+            ('metadata_recordGeneratedAt', 'metadata_generated_at'),
             ('metadata_recordGeneratedBy', 'metadata_generatedBy')
         ]
         self.int_fields = [
@@ -103,8 +102,8 @@ class CvDataFlattener(DataFlattener):
         self.json_string_fields = ['size']
 
     def add_enhancements(self, rec):
-        metadata_generatedAt = parse_date(rec['metadata_generatedAt'])
-        rec['metadata_generatedAt'] = metadata_generatedAt.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]
+        metadata_generated_at = parse_date(rec['metadata_generated_at'])
+        rec['metadata_generated_at'] = metadata_generated_at.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]
         rec['randomNum'] = random.random()
-        rec['metadata_generatedAt_timeOfDay'] = metadata_generatedAt.hour + metadata_generatedAt.minute/60 + metadata_generatedAt.second/3600
+        rec['mmetadata_generated_at_timeOfDay'] = metadata_generated_at.hour + metadata_generated_at.minute/60 + metadata_generated_at.second/3600
         return rec

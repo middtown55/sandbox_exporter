@@ -102,7 +102,6 @@ class SandboxExporter(object):
             'sdate': sdate.strftime('%Y%m%d%H'),
             'edate': edate.strftime('%Y%m%d%H')
         }
-        fp = lambda filenum: (self.output_convention+'_{filenum}').format(filenum=filenum, **fp_params)
         sfolder = self.get_folder_prefix(pilot, message_type, sdate)
         efolder = self.get_folder_prefix(pilot, message_type, edate)
 
@@ -155,8 +154,8 @@ class SandboxExporter(object):
         fp = lambda filenum: (self.output_convention+'_{filenum}').format(filenum=filenum, **fp_params)
 
         if csv and not output_fields:
-            flattenerMod = load_flattener('{}/{}'.format(pilot, message_type.upper()))
-            flattener = flattenerMod()
+            flattener_mod = load_flattener('{}/{}'.format(pilot, message_type.upper()))
+            flattener = flattener_mod()
         else:
             flattener=DataFlattener()
 
